@@ -1,0 +1,120 @@
+{
+  "zh_CN": {
+    "title": "批处理任务管理器",
+    "task_name": "任务名称",
+    "bat_command": "指令",
+    "add_task": "添加任务",
+    "aggregate_name": "聚合名称",
+    "create_aggregate": "创建聚合指令",
+    "search_task": "搜索指令",
+    "clear_search": "清除搜索",
+    "task_list": {
+      "name": "任务名称",
+      "type": "类型",
+      "status": "状态",
+      "frequent": "常用",
+      "yes": "是",
+      "no": "否"
+    },
+    "buttons": {
+      "execute_selected": "执行选中",
+      "delete_selected": "删除选中",
+      "batch_execute": "批量执行",
+      "pause_between": "任务间暂停3秒",
+      "import_tasks": "导入任务",
+      "export_tasks": "导出任务",
+      "move_up": "上移",
+      "move_down": "下移",
+      "set_frequent": "设为常用",
+      "unset_frequent": "取消常用",
+      "show_frequent": "显示常用"
+    },
+    "log_title": "执行日志",
+    "messages": {
+      "empty_name_command": "任务名称和BAT指令不能为空！",
+      "name_exists": "任务名称已存在！",
+      "select_execute": "请选择要运行的任务！",
+      "select_delete": "请选择要删除的任务！",
+      "select_frequent": "请选择要设为常用的任务！",
+      "select_unfrequent": "请选择要取消常用的任务！",
+      "empty_aggregate": "聚合名称不能为空！",
+      "select_aggregate": "请选择要聚合的任务！",
+      "aggregate_exists": "聚合名称已存在！",
+      "import_success": "任务导入成功！",
+      "import_failed": "任务导入失败！",
+      "export_success": "任务导出成功！",
+      "export_failed": "任务导出失败！"
+    },
+    "task_status": {
+      "waiting": "等待中",
+      "running": "执行中",
+      "completed": "已完成",
+      "failed": "失败"
+    },
+    "task_type": {
+      "normal": "普通任务",
+      "aggregate": "聚合指令"
+    },
+    "language": "语言",
+    "show_edit_area": "显示编辑"
+  },
+  "en_US": {
+    "title": "Command Task Manager",
+    "task_name": "Task Name",
+    "bat_command": "Command",
+    "add_task": "Add Task",
+    "aggregate_name": "Aggregate Name",
+    "create_aggregate": "Create Aggregate",
+    "search_task": "Search Task",
+    "clear_search": "Clear Search",
+    "task_list": {
+      "name": "Name",
+      "type": "Type",
+      "status": "Status",
+      "frequent": "Frequent",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "buttons": {
+      "execute_selected": "Execute Selected",
+      "delete_selected": "Delete Selected",
+      "batch_execute": "Batch Execute",
+      "pause_between": "3s Pause Between Tasks",
+      "import_tasks": "Import Tasks",
+      "export_tasks": "Export Tasks",
+      "move_up": "Move Up",
+      "move_down": "Move Down",
+      "set_frequent": "Set Frequent",
+      "unset_frequent": "Unset Frequent",
+      "show_frequent": "Show Frequent"
+    },
+    "log_title": "Execution Log",
+    "messages": {
+      "empty_name_command": "Task name and BAT command cannot be empty!",
+      "name_exists": "Task name already exists!",
+      "select_execute": "Please select a task to execute!",
+      "select_delete": "Please select a task to delete!",
+      "select_frequent": "Please select a task to set as frequent!",
+      "select_unfrequent": "Please select a task to unset as frequent!",
+      "empty_aggregate": "Aggregate name cannot be empty!",
+      "select_aggregate": "Please select tasks to aggregate!",
+      "aggregate_exists": "Aggregate name already exists!",
+      "import_success": "Tasks imported successfully!",
+      "import_failed": "Failed to import tasks!",
+      "export_success": "Tasks exported successfully!",
+      "export_failed": "Failed to export tasks!"
+    },
+    "task_status": {
+      "waiting": "Waiting",
+      "running": "Running",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "task_type": {
+      "normal": "Normal Task",
+      "aggregate": "Aggregate Command"
+    },
+    "language": "Language",
+    "show_edit_area": "Show Edit"
+  }
+}

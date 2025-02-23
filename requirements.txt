@@ -1,0 +1,5 @@
+# 基础依赖
+tkinter
+
+# 打包工具
+pyinstaller>=5.13.0
