@@ -1,4 +1,4 @@
-# BAT任务管理器 / BAT Task Manager
+# 任务管理器 / command Task Manager
 
 [中文](#chinese) | [English](#english)
 
