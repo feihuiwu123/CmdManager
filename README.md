@@ -17,7 +17,7 @@
 - **执行日志**：实时显示任务执行状态和输出
 
 ### 运行效果
-![中文界面](images/img_zh.png)
+![中文界面](docs/images/img_zh.png)
 *图片说明：批处理任务管理器中文界面*
 
 ### 使用说明
@@ -64,7 +64,7 @@ Cross-platform Batch Task Manager is a GUI tool developed in Python for managing
 - **Execution Log**: Real-time display of task execution status and output
 
 ### Screenshots
-![English Interface](images/img_en.png)
+![English Interface](docs/images/img_en.png)
 *Screenshot: Batch Task Manager English Interface*
 
 ### User Guide
