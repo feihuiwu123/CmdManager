@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 class LanguageManager:
     def __init__(self, language_file="language.json"):
@@ -11,8 +12,17 @@ class LanguageManager:
     def load_languages(self):
         """加载语言配置文件"""
         try:
-            if os.path.exists(self.language_file):
-                with open(self.language_file, 'r', encoding='utf-8') as f:
+            # 获取可执行文件所在目录
+            if getattr(sys, 'frozen', False):
+                # 如果是打包后的环境
+                base_path = sys._MEIPASS
+            else:
+                # 如果是开发环境
+                base_path = os.path.dirname(os.path.abspath(__file__))
+            
+            language_path = os.path.join(base_path, self.language_file)
+            if os.path.exists(language_path):
+                with open(language_path, 'r', encoding='utf-8') as f:
                     self.languages = json.load(f)
         except Exception as e:
             print(f"加载语言配置失败: {str(e)}")

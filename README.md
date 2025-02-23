@@ -1,4 +1,4 @@
-# BAT任务管理器 / BAT Task Manager
+#批处理任务管理器 /Command  Task Manager
 
 [中文](#chinese) | [English](#english)
 
@@ -49,6 +49,22 @@
 - Python 3.6或更高版本（如使用源码运行）
 - 图形界面环境（GUI支持）
 
+### 打包说明
+1. **环境准备**
+   - 安装Python 3.6或更高版本
+   - 安装所需依赖：`pip install -r requirements.txt`
+
+2. **打包步骤**
+   - 使用PyInstaller打包：`pyinstaller bat_task_manager.spec`
+   - 打包完成后，可执行文件位于`dist`目录下
+   -  或者 pyinstaller --onefile --add-data=language.json:. --add-data=images:images main.py
+
+3. **注意事项**
+   - 确保打包前已安装所有依赖
+   - 打包配置文件已包含必要的资源文件
+   - Windows系统下会生成`任务管理器.exe`
+4.  **已有的成果物**
+    /output/任务管理器.exe
 <a name="english"></a>
 ## English Description
 
