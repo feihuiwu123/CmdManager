@@ -55,9 +55,9 @@
    - 安装所需依赖：`pip install -r requirements.txt`
 
 2. **打包步骤**
-   - 使用PyInstaller打包：`pyinstaller bat_task_manager.spec`
+   - pyinstaller --onefile --add-data=language.json:. --add-data=images:images --name=CmdManager main.py
+   - 或使用PyInstaller打包：`pyinstaller bat_task_manager.spec`
    - 打包完成后，可执行文件位于`dist`目录下
-   -  或者 pyinstaller --onefile --add-data=language.json:. --add-data=images:images main.py
 
 3. **注意事项**
    - 确保打包前已安装所有依赖
