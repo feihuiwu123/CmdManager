@@ -2,7 +2,7 @@
   "zh_CN": {
     "title": "批处理任务管理器",
     "task_name": "任务名称",
-    "bat_command": "指令",
+    "bat_command": "任务指令",
     "add_task": "添加任务",
     "aggregate_name": "聚合名称",
     "create_aggregate": "创建聚合指令",

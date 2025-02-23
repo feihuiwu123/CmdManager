@@ -129,7 +129,8 @@ class TaskManager:
                         shell=True,
                         capture_output=True,
                         text=True,
-                        encoding='gbk'
+                        encoding='utf-8',
+                        errors='replace'
                     )
                     if result.stdout:
                         for line in result.stdout.splitlines():
@@ -158,7 +159,9 @@ class TaskManager:
                     text=True,
                     shell=False,
                     bufsize=1,
-                    universal_newlines=True
+                    universal_newlines=True,
+                    encoding='utf-8',
+                    errors='replace'
                 )
 
                 # 创建输出读取线程

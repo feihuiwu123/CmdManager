@@ -1,4 +1,4 @@
-#批处理任务管理器 /Command  Task Manager
+# 任务管理器 / Command Task Manager
 
 [中文](#chinese) | [English](#english)
 
@@ -64,7 +64,7 @@
    - 打包配置文件已包含必要的资源文件
    - Windows系统下会生成`任务管理器.exe`
 4.  **已有的成果物**
-    /output/任务管理器.exe
+    /output/CmdManager.exe
 <a name="english"></a>
 ## English Description
 

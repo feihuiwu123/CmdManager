@@ -27,38 +27,25 @@ class BatTaskManagerApp:
     def create_widgets(self):
         # 创建顶部菜单栏
         menu_frame = ttk.Frame(self.root)
-        menu_frame.pack(fill=tk.X, padx=5, pady=5)
+        menu_frame.pack(fill=tk.X, padx=3, pady=2)
 
-        # 添加语言选择下拉框和显示控制区域
-        self.language_label = ttk.Label(menu_frame, text=self.language_manager.get_text("language"))
-        self.language_label.pack(side=tk.LEFT, padx=5)
-        self.language_var = tk.StringVar(value=self.language_manager.current_language)
-        language_combo = ttk.Combobox(menu_frame, textvariable=self.language_var, values=self.language_manager.get_available_languages(), state="readonly")
-        language_combo.pack(side=tk.LEFT, padx=5)
-        language_combo.bind("<<ComboboxSelected>>", self.switch_language)
+        # 隐藏语言选择，默认使用中文
+        self.language_var = tk.StringVar(value="zh_CN")
         
-        # 添加显示编辑框控制，调整文本显示
-        self.show_edit_var = tk.BooleanVar(value=True)
-        self.show_edit_checkbox = ttk.Checkbutton(menu_frame, text=self.language_manager.get_text("show_edit_area"), variable=self.show_edit_var, command=self.toggle_edit_area)
-        self.show_edit_checkbox.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
-
-        # 绑定Enter键事件到根窗口
-        self.root.bind('<Return>', self.execute_selected_tasks)
-
         # 创建左右分栏
         left_frame = ttk.Frame(self.root)
-        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=3, pady=3)
 
         right_frame = ttk.Frame(self.root)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=3, pady=3)
 
         # 左侧：任务管理区域
         task_frame = ttk.Frame(left_frame)
-        task_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        task_frame.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
 
         # 区域1：任务添加区域
         add_frame = ttk.Frame(task_frame)
-        add_frame.pack(fill=tk.X, padx=5, pady=5)
+        add_frame.pack(fill=tk.X, padx=2, pady=2)
 
         self.task_name_label = ttk.Label(add_frame, text=self.language_manager.get_text("task_name"))
         self.task_name_label.pack(side=tk.LEFT, padx=5)
@@ -69,7 +56,7 @@ class BatTaskManagerApp:
 
         # BAT指令输入区域
         cmd_frame = ttk.Frame(task_frame)
-        cmd_frame.pack(fill=tk.X, padx=5, pady=5)
+        cmd_frame.pack(fill=tk.X, padx=2, pady=2)
         self.bat_command_label = ttk.Label(cmd_frame, text=self.language_manager.get_text("bat_command"))
         self.bat_command_label.pack(side=tk.LEFT, padx=5)
         self.bat_command_entry = tk.Text(cmd_frame, height=3)
@@ -77,7 +64,7 @@ class BatTaskManagerApp:
 
         # 区域2：聚合指令区域
         aggregate_frame = ttk.Frame(task_frame)
-        aggregate_frame.pack(fill=tk.X, padx=5, pady=5)
+        aggregate_frame.pack(fill=tk.X, padx=2, pady=2)
         self.aggregate_name_label = ttk.Label(aggregate_frame, text=self.language_manager.get_text("aggregate_name"))
         self.aggregate_name_label.pack(side=tk.LEFT, padx=5)
         self.aggregate_name_entry = ttk.Entry(aggregate_frame)
@@ -87,7 +74,7 @@ class BatTaskManagerApp:
 
         # 区域3：搜索区域
         search_frame = ttk.Frame(task_frame)
-        search_frame.pack(fill=tk.X, padx=5, pady=5)
+        search_frame.pack(fill=tk.X, padx=2, pady=2)
         self.search_label = ttk.Label(search_frame, text=self.language_manager.get_text("search_task"))
         self.search_label.pack(side=tk.LEFT, padx=5)
         self.search_entry = ttk.Entry(search_frame)
@@ -98,7 +85,7 @@ class BatTaskManagerApp:
 
         # 区域4：任务列表和操作区域
         lists_frame = ttk.Frame(task_frame)
-        lists_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        lists_frame.pack(fill=tk.BOTH, expand=True, padx=2, pady=1)
 
         # 任务列表
         self.task_tree = ttk.Treeview(lists_frame, columns=("name", "type", "status", "frequent"), show="headings", height=15)
@@ -128,74 +115,66 @@ class BatTaskManagerApp:
         self.task_tree.bind('<Enter>', self.show_command_preview)
         self.task_tree.bind('<Leave>', self.hide_command_preview)
         self.task_tree.bind('<Motion>', self.update_command_preview)
+        self.task_tree.bind('<Return>', self.execute_selected_tasks)  # 添加Enter键绑定
 
         # 操作按钮区域（作为任务列表区域的一部分）
         btn_frame = ttk.LabelFrame(lists_frame, text=self.language_manager.get_text("buttons.operations"))
-        btn_frame.pack(fill=tk.X, padx=5, pady=5)
+        btn_frame.pack(fill=tk.X, padx=2, pady=2)
 
-        # 上方按钮组
-        top_btn_frame = ttk.Frame(btn_frame)
-        top_btn_frame.pack(fill=tk.X, padx=5, pady=5)
+        # 第一排按钮组
+        first_row_frame = ttk.Frame(btn_frame)
+        first_row_frame.pack(fill=tk.X, padx=2, pady=2)
 
-        # 左侧按钮组
-        left_btn_frame = ttk.Frame(top_btn_frame)
-        left_btn_frame.pack(side=tk.LEFT)
-        self.execute_button = ttk.Button(left_btn_frame, text=self.language_manager.get_text("buttons.execute_selected"), command=self.run_selected)
+        # 所有操作按钮排列在一行
+        self.execute_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.execute_selected"), command=self.run_selected)
         self.execute_button.pack(side=tk.LEFT, padx=2)
-        self.delete_button = ttk.Button(left_btn_frame, text=self.language_manager.get_text("buttons.delete_selected"), command=self.delete_selected)
+        self.delete_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.delete_selected"), command=self.delete_selected)
         self.delete_button.pack(side=tk.LEFT, padx=2)
-        self.batch_execute_button = ttk.Button(left_btn_frame, text=self.language_manager.get_text("buttons.batch_execute"), command=self.run_multiple)
+        self.batch_execute_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.batch_execute"), command=self.run_multiple)
         self.batch_execute_button.pack(side=tk.LEFT, padx=2)
         self.pause_var = tk.BooleanVar(value=False)
-        self.pause_var_label = ttk.Checkbutton(left_btn_frame, text=self.language_manager.get_text("buttons.pause_between"), variable=self.pause_var)
+        self.pause_var_label = ttk.Checkbutton(first_row_frame, text=self.language_manager.get_text("buttons.pause_between"), variable=self.pause_var)
         self.pause_var_label.pack(side=tk.LEFT, padx=5)
-
-        # 右侧按钮组
-        right_btn_frame = ttk.Frame(top_btn_frame)
-        right_btn_frame.pack(side=tk.RIGHT)
-        self.move_up_button = ttk.Button(right_btn_frame, text=self.language_manager.get_text("buttons.move_up"), command=lambda: self.move_task_up(self.task_tree))
-        self.move_up_button.pack(side=tk.LEFT, padx=2)
-        self.move_down_button = ttk.Button(right_btn_frame, text=self.language_manager.get_text("buttons.move_down"), command=lambda: self.move_task_down(self.task_tree))
-        self.move_down_button.pack(side=tk.LEFT, padx=2)
-
-        # 下方按钮组
-        bottom_btn_frame = ttk.Frame(btn_frame)
-        bottom_btn_frame.pack(fill=tk.X, padx=5, pady=5)
-
-        # 左侧功能按钮
-        bottom_left_frame = ttk.Frame(bottom_btn_frame)
-        bottom_left_frame.pack(side=tk.LEFT)
-        self.set_frequent_button = ttk.Button(bottom_left_frame, text=self.language_manager.get_text("buttons.set_frequent"), command=self.set_as_frequent)
+        self.set_frequent_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.set_frequent"), command=self.set_as_frequent)
         self.set_frequent_button.pack(side=tk.LEFT, padx=2)
-        self.unset_frequent_button = ttk.Button(bottom_left_frame, text=self.language_manager.get_text("buttons.unset_frequent"), command=self.unset_as_frequent)
+        self.unset_frequent_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.unset_frequent"), command=self.unset_as_frequent)
         self.unset_frequent_button.pack(side=tk.LEFT, padx=2)
         self.show_frequent_var = tk.BooleanVar(value=False)
-        self.show_frequent_var_label = ttk.Checkbutton(bottom_left_frame, text=self.language_manager.get_text("buttons.show_frequent"), variable=self.show_frequent_var, command=self.filter_frequent_tasks)
+        self.show_frequent_var_label = ttk.Checkbutton(first_row_frame, text=self.language_manager.get_text("buttons.show_frequent"), variable=self.show_frequent_var, command=self.filter_frequent_tasks)
         self.show_frequent_var_label.pack(side=tk.LEFT, padx=5)
-
-        # 右侧导入导出按钮
-        bottom_right_frame = ttk.Frame(bottom_btn_frame)
-        bottom_right_frame.pack(side=tk.RIGHT)
-        self.import_button = ttk.Button(bottom_right_frame, text=self.language_manager.get_text("buttons.import_tasks"), command=self.import_tasks)
-        self.import_button.pack(side=tk.LEFT, padx=2)
-        self.export_button = ttk.Button(bottom_right_frame, text=self.language_manager.get_text("buttons.export_tasks"), command=self.export_tasks)
-        self.export_button.pack(side=tk.LEFT, padx=2)
+        self.move_up_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.move_up"), command=lambda: self.move_task_up(self.task_tree))
+        self.move_up_button.pack(side=tk.LEFT, padx=2)
+        self.move_down_button = ttk.Button(first_row_frame, text=self.language_manager.get_text("buttons.move_down"), command=lambda: self.move_task_down(self.task_tree))
+        self.move_down_button.pack(side=tk.LEFT, padx=2)
 
         # 右侧：日志区域，优化布局
         log_frame = ttk.Frame(right_frame)
         log_frame.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
         
-        # 日志标题 - 移动到右上方，减少边距
+        # 日志标题和控制区域
         log_title_frame = ttk.Frame(log_frame)
         log_title_frame.pack(fill=tk.X, padx=2, pady=0)
+        
+        # 日志标题
         self.log_label = ttk.Label(log_title_frame, text=self.language_manager.get_text("log_title"))
         self.log_label.pack(side=tk.LEFT)
         
-        # 日志文本框和滚动条，减少边距
+        # 显示编辑框控制
+        self.show_edit_var = tk.BooleanVar(value=True)
+        self.show_edit_checkbox = ttk.Checkbutton(log_title_frame, text=self.language_manager.get_text("show_edit_area"), variable=self.show_edit_var, command=self.toggle_edit_area)
+        self.show_edit_checkbox.pack(side=tk.RIGHT, padx=5)
+        
+        # 移动导入导出按钮到日志标题区域
+        self.import_button = ttk.Button(log_title_frame, text=self.language_manager.get_text("buttons.import_tasks"), command=self.import_tasks)
+        self.import_button.pack(side=tk.RIGHT, padx=2)
+        self.export_button = ttk.Button(log_title_frame, text=self.language_manager.get_text("buttons.export_tasks"), command=self.export_tasks)
+        self.export_button.pack(side=tk.RIGHT, padx=2)
+        
+        # 日志文本框和滚动条
         log_content_frame = ttk.Frame(log_frame)
         log_content_frame.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
         
-        self.log_text = tk.Text(log_content_frame, height=10, wrap=tk.WORD)
+        self.log_text = tk.Text(log_content_frame, height=20, wrap=tk.WORD)
         self.log_text.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
         
         log_scrollbar = ttk.Scrollbar(log_content_frame, orient="vertical", command=self.log_text.yview)
