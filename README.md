@@ -1,4 +1,4 @@
-#批处理任务管理器 /Command  Task Manager
+# 任务管理器 / command Task Manager
 
 [中文](#chinese) | [English](#english)
 
