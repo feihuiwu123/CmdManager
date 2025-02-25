@@ -160,7 +160,7 @@ class TaskManager:
                 try:
                     # 提取暂停时间（秒数）
                     pause_time = int(command.strip().split()[1])
-                    log_callback(f"暂停{pause_time}秒...")
+                    log_callback(f"pause {pause_time} seconds...")
                     time.sleep(pause_time)
                     return 0
                 except (IndexError, ValueError):
