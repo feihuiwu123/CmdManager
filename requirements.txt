@@ -3,3 +3,6 @@ tkinter
 
 # 打包工具
 pyinstaller>=5.13.0
+
+# Windows系统支持
+pywin32>=306

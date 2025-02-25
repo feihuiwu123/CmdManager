@@ -120,83 +120,29 @@ class TaskManager:
             status_callback(task_name, "task_status.running")
             log_callback(self.language_manager.get_text("messages.start_task").format(task_name))
             log_callback(self.language_manager.get_text("messages.execute_command").format(command))
+            
+            return_code = 0
+            # 如果是聚合命令，分割并逐个执行
+            if "&&" in command:
+                commands = [cmd.strip() for cmd in command.split("&&")]
+                for cmd in commands:
+                    if not cmd:
+                        continue
+                    log_callback(f"执行子命令: {cmd}")
+                    cmd_return_code = self._execute_single_command(cmd, log_callback)
+                    if cmd_return_code != 0:
+                        return_code = cmd_return_code
+                        break
+            else:
+                return_code = self._execute_single_command(command, log_callback)
 
-            # 根据平台选择对应的命令执行方式
-            if self.platform == "windows":
-                try:
-                    result = subprocess.run(
-                        command,
-                        shell=True,
-                        capture_output=True,
-                        text=True,
-                        encoding='utf-8',
-                        errors='replace'
-                    )
-                    if result.stdout:
-                        for line in result.stdout.splitlines():
-                            log_callback(line)
-                    if result.stderr:
-                        for line in result.stderr.splitlines():
-                            log_callback(self.language_manager.get_text("messages.error").format(line))
-                    
-                    return_code = result.returncode
-                    # 根据返回码更新最终状态
-                    if return_code == 0:
-                        status_callback(task_name, "task_status.completed")
-                        log_callback(self.language_manager.get_text("messages.task_success").format(task_name))
-                    else:
-                        status_callback(task_name, "task_status.failed")
-                        log_callback(self.language_manager.get_text("messages.task_failed").format(task_name, return_code))
-                except Exception as e:
-                    log_callback(self.language_manager.get_text("messages.error").format(str(e)))
-                    status_callback(task_name, "task_status.failed")
-                    return_code = 1
-            else:  # Linux/Unix平台
-                process = subprocess.Popen(
-                    ['bash', '-c', command],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                    shell=False,
-                    bufsize=1,
-                    universal_newlines=True,
-                    encoding='utf-8',
-                    errors='replace'
-                )
-
-                # 创建输出读取线程
-                def read_output(pipe, callback_type):
-                    try:
-                        for line in iter(pipe.readline, ''):
-                            if line:
-                                line = line.strip()
-                                if line:
-                                    if callback_type == 'stdout':
-                                        log_callback(line)
-                                    else:
-                                        log_callback(self.language_manager.get_text("messages.error").format(line))
-                    except Exception as e:
-                        log_callback(self.language_manager.get_text("messages.error").format(str(e)))
-
-                stdout_thread = threading.Thread(target=read_output, args=(process.stdout, 'stdout'))
-                stderr_thread = threading.Thread(target=read_output, args=(process.stderr, 'stderr'))
-                stdout_thread.daemon = True
-                stderr_thread.daemon = True
-                stdout_thread.start()
-                stderr_thread.start()
-
-                # 等待进程完成
-                process.wait()
-                stdout_thread.join()
-                stderr_thread.join()
-
-                # 根据返回码更新最终状态
-                if process.returncode == 0:
-                    status_callback(task_name, "task_status.completed")
-                    log_callback(self.language_manager.get_text("messages.task_success").format(task_name))
-                else:
-                    status_callback(task_name, "task_status.failed")
-                    log_callback(self.language_manager.get_text("messages.task_failed").format(task_name, process.returncode))
+            # 根据返回码更新最终状态
+            if return_code == 0:
+                status_callback(task_name, "task_status.completed")
+                log_callback(self.language_manager.get_text("messages.task_success").format(task_name))
+            else:
+                status_callback(task_name, "task_status.failed")
+                log_callback(self.language_manager.get_text("messages.task_failed").format(task_name, return_code))
 
         except Exception as e:
             status_callback(task_name, "task_status.failed")
@@ -205,3 +151,63 @@ class TaskManager:
         finally:
             with self.task_lock:
                 self.running_tasks.remove(task_name)
+
+    def _execute_single_command(self, command, log_callback):
+        """执行单个命令"""
+        try:
+            # 特殊处理pause命令
+            if command.strip().lower().startswith('pause'):
+                try:
+                    # 提取暂停时间（秒数）
+                    pause_time = int(command.strip().split()[1])
+                    log_callback(f"暂停{pause_time}秒...")
+                    time.sleep(pause_time)
+                    return 0
+                except (IndexError, ValueError):
+                    # 如果没有指定时间或格式错误，默认暂停3秒
+                    log_callback("暂停3秒...")
+                    time.sleep(3)
+                    return 0
+
+            # 其他命令使用原有的处理逻辑
+            shell = True if self.platform == "windows" else False
+            process = subprocess.Popen(
+                command,
+                shell=shell,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding='utf-8'
+            )
+
+            # 创建输出读取线程
+            def read_output(pipe, callback_type):
+                try:
+                    for line in iter(pipe.readline, ''):
+                        if line:
+                            line = line.strip()
+                            if line:
+                                if callback_type == 'stdout':
+                                    log_callback(line)
+                                else:
+                                    log_callback(self.language_manager.get_text("messages.error").format(line))
+                except Exception as e:
+                    log_callback(self.language_manager.get_text("messages.error").format(str(e)))
+
+            stdout_thread = threading.Thread(target=read_output, args=(process.stdout, 'stdout'))
+            stderr_thread = threading.Thread(target=read_output, args=(process.stderr, 'stderr'))
+            stdout_thread.daemon = True
+            stderr_thread.daemon = True
+            stdout_thread.start()
+            stderr_thread.start()
+
+            # 等待进程完成
+            process.wait()
+            stdout_thread.join()
+            stderr_thread.join()
+
+            return process.returncode
+
+        except Exception as e:
+            log_callback(self.language_manager.get_text("messages.error").format(str(e)))
+            return -1
