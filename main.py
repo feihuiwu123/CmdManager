@@ -595,6 +595,14 @@ class BatTaskManagerApp:
         ttk.Label(menu_frame, text=self.language_manager.get_text("language")).pack(side=tk.LEFT, padx=5)
 
 if __name__ == "__main__":
+    import sys
+    if getattr(sys, 'frozen', False):
+        # 如果是打包后的exe运行，隐藏控制台窗口
+        import win32gui
+        import win32con
+        hwnd = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+    
     root = tk.Tk()
     app = BatTaskManagerApp(root)
     root.mainloop()
